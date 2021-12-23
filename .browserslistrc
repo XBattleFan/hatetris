@@ -1,0 +1,4 @@
+# Browsers must support `async`/`await`
+# https://caniuse.com/?search=async%2Fawait
+> 1% and last 2 versions
+not op_mini all

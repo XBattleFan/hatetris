@@ -1,11 +1,9 @@
 /* eslint-env jest */
 
-'use strict'
-
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Game, { hatetris, lovetris } from './Game'
+import { Game, hatetris, lovetris } from './Game'
 import type { GameProps } from './Game'
 import hatetrisRotationSystem from '../../rotation-systems/hatetris-rotation-system'
 
@@ -13,7 +11,7 @@ jest.useFakeTimers()
 
 describe('<Game>', () => {
   const getGame = (props: Partial<GameProps> = {}) => {
-    return shallow<Game>(
+    return shallow<typeof Game>(
       <Game
         bar={4}
         replayTimeout={0}
@@ -59,12 +57,12 @@ describe('<Game>', () => {
 
     const warn = jest.spyOn(console, 'warn')
     warn.mockImplementation(() => {})
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Left' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Right' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Down' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'Up' }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Left' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Right' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Down' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Up' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(6)
     expect(game.state()).toEqual({
       customAiCode: '',
@@ -110,7 +108,7 @@ describe('<Game>', () => {
       replay: []
     }))
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowLeft' }))
     expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 1,
@@ -138,7 +136,7 @@ describe('<Game>', () => {
       replay: ['L']
     }))
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowRight' }))
     expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 2,
@@ -176,7 +174,7 @@ describe('<Game>', () => {
       replay: ['L', 'R']
     }))
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown' }))
     expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 3,
@@ -224,7 +222,7 @@ describe('<Game>', () => {
       replay: ['L', 'R', 'D']
     }))
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowUp' }))
     expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 4,
@@ -282,7 +280,7 @@ describe('<Game>', () => {
       replay: ['L', 'R', 'D', 'U']
     }))
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
     expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 3,
@@ -340,7 +338,7 @@ describe('<Game>', () => {
       replay: ['L', 'R', 'D', 'U']
     }))
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(game.state()).toEqual(expect.objectContaining({
       mode: 'PLAYING',
       wellStateId: 4,
@@ -402,7 +400,7 @@ describe('<Game>', () => {
     const warn = jest.spyOn(console, 'warn')
     warn.mockImplementation(() => {})
 
-    game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'y', ctrlKey: true }))
     expect(warn).toHaveBeenCalledTimes(1)
 
     warn.mockRestore()
@@ -481,7 +479,7 @@ describe('<Game>', () => {
 
     for (let i = 0; i < 187; i++) {
       expect(game.state().mode).toBe('PLAYING')
-      game.instance().handleDown()
+      game.find('.e2e__down').simulate('click')
     }
 
     expect(game.state()).toEqual(expect.objectContaining({
@@ -547,7 +545,7 @@ describe('<Game>', () => {
 
     expect(game.state().wellStates[game.state().wellStateId].piece.id).toBe('S')
     for (let i = 0; i < 18; i++) {
-      game.instance().handleDown()
+      game.find('.e2e__down').simulate('click')
     }
     expect(game.state().wellStates[game.state().wellStateId].piece.id).toBe('Z')
   })
@@ -674,13 +672,13 @@ describe('<Game>', () => {
 
     for (let i = 0; i < 18; i++) {
       expect(game.state().error).toBeNull()
-      game.instance().handleDown()
+      game.find('.e2e__down').simulate('click')
     }
 
     const error = console.error
     console.error = jest.fn()
     expect(game.state().error).toBeNull()
-    game.instance().handleDown()
+    game.find('.e2e__down').simulate('click')
     console.error = error
 
     expect(game.state()).toEqual(expect.objectContaining({
@@ -745,40 +743,8 @@ describe('<Game>', () => {
       game.unmount()
     })
 
-    it('lets you start a new game', () => {
-      // TODO: this is no longer provided in the UI...
-      game.instance().handleClickStart()
-      expect(game.state()).toEqual(expect.objectContaining({
-        enemy: hatetris,
-        mode: 'PLAYING',
-        wellStates: [
-          expect.anything()
-        ],
-        wellStateId: 0,
-        replayTimeoutId: undefined // trashed
-      }))
-    })
-
-    it('lets you start a new replay', () => {
-      // TODO: this is no longer provided in the UI...
-      const prompt = jest.spyOn(window, 'prompt')
-      prompt.mockReturnValueOnce('AAAA 1234 BCDE 2345 CDEF 3456')
-      game.instance().handleClickReplay()
-      prompt.mockRestore()
-
-      expect(game.state()).toEqual(expect.objectContaining({
-        enemy: hatetris,
-        mode: 'REPLAYING',
-        wellStates: [
-          expect.anything()
-        ],
-        wellStateId: 0,
-        replayTimeoutId: expect.any(Number)
-      }))
-    })
-
     it('lets you undo and stops replaying if you do so', () => {
-      game.instance().handleDocumentKeyDown(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
+      document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'z', ctrlKey: true }))
       expect(game.state()).toEqual(expect.objectContaining({
         enemy: hatetris,
         mode: 'PLAYING', // no longer replaying
@@ -896,7 +862,7 @@ describe('<Game>', () => {
     runs.forEach(run => {
       describe(run.name, () => {
         Object.entries(run.replays).forEach(([encoding, string]) => {
-          it(encoding, () => {
+          it(encoding, async () => {
             const warn = console.warn
             console.warn = jest.fn()
 
@@ -920,30 +886,29 @@ describe('<Game>', () => {
             }
 
             // Copy the replay
-            return game.instance().handleClickCopyReplay()
-              .then(() => navigator.clipboard.readText())
-              .then(contents => {
-                if (encoding === 'Base2048') {
-                  expect(contents).toBe(string)
-                } else {
-                  // Other encodings have differing amounts of padding so result in slightly
-                  // different output Base2048
-                }
+            game.find('.e2e__copy-replay').simulate('click')
+            await undefined
+            const contents = await navigator.clipboard.readText()
+            if (encoding === 'Base2048') {
+              expect(contents).toBe(string)
+            } else {
+              // Other encodings have differing amounts of padding so result in slightly
+              // different output Base2048
+            }
 
-                // "copied!" disappears after a while
-                expect(game.state().replayCopiedTimeoutId).toEqual(expect.any(Number))
-                expect(game.find('.e2e__copy-replay').text()).toBe('copied!')
+            // "copied!" disappears after a while
+            expect(game.state().replayCopiedTimeoutId).toEqual(expect.any(Number))
+            expect(game.find('.e2e__copy-replay').text()).toBe('copied!')
 
-                jest.runAllTimers()
-                expect(game.state().replayCopiedTimeoutId).toBeUndefined()
+            jest.runAllTimers()
+            expect(game.state().replayCopiedTimeoutId).toBeUndefined()
 
-                game.find('.e2e__done').simulate('click')
-                expect(game.state().mode).toBe('INITIAL')
-                game.unmount()
+            game.find('.e2e__done').simulate('click')
+            expect(game.state().mode).toBe('INITIAL')
+            game.unmount()
 
-                // TODO: maybe some assertions about how many trailing moves were ignored
-                console.warn = warn
-              })
+            // TODO: maybe some assertions about how many trailing moves were ignored
+            console.warn = warn
           })
         })
       })

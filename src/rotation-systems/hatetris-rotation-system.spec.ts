@@ -1,7 +1,5 @@
 /* eslint-env jest */
 
-'use strict'
-
 import hatetrisRotationSystem from './hatetris-rotation-system'
 
 describe('hatetrisRotationSystem', () => {

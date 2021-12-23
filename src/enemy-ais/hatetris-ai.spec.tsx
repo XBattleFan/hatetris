@@ -1,11 +1,9 @@
 /* eslint-env jest */
 
-'use strict'
-
 import { shallow } from 'enzyme'
 import * as React from 'react'
 
-import Game from '../components/Game/Game'
+import { GetNextCoreStates, getNextCoreStates } from '../components/Game/Game'
 import { hatetrisAi } from './hatetris-ai'
 import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system'
 
@@ -13,17 +11,14 @@ import hatetrisRotationSystem from '../rotation-systems/hatetris-rotation-system
 // Least significant bit is rendered on the *left* on web, but appears to the
 // *right* of each binary numeric literal
 
-const game = shallow<Game>(
-  <Game
-    bar={4}
-    replayTimeout={0}
-    rotationSystem={hatetrisRotationSystem}
-    wellDepth={8}
-    wellWidth={10}
-  />
+const x: GetNextCoreStates = (core, pieceId) => getNextCoreStates(
+  hatetrisRotationSystem,
+  10,
+  8,
+  4,
+  core,
+  pieceId
 )
-
-const getNextCoreStates = game.instance().getNextCoreStates
 
 describe('hatetrisAi', () => {
   it('generates an S by default', () => {
@@ -39,7 +34,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b0000000000
       ]
-    }, undefined, getNextCoreStates)).toEqual(['S', [{
+    }, undefined, x)).toEqual(['S', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -67,7 +62,7 @@ describe('hatetrisAi', () => {
         0b0001000000,
         0b1111011111
       ]
-    }, undefined, getNextCoreStates)).toEqual(['Z', [{
+    }, undefined, x)).toEqual(['Z', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -95,7 +90,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b1111101111
       ]
-    }, undefined, getNextCoreStates)).toEqual(['O', [{
+    }, undefined, x)).toEqual(['O', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -123,7 +118,7 @@ describe('hatetrisAi', () => {
         0b0000000000,
         0b1111001111
       ]
-    }, undefined, getNextCoreStates)).toEqual(['I', [{
+    }, undefined, x)).toEqual(['I', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -151,7 +146,7 @@ describe('hatetrisAi', () => {
         0b1011100111,
         0b1111110111
       ]
-    }, undefined, getNextCoreStates)).toEqual(['L', [{
+    }, undefined, x)).toEqual(['L', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -179,7 +174,7 @@ describe('hatetrisAi', () => {
         0b1011100111,
         0b1111101111
       ]
-    }, undefined, getNextCoreStates)).toEqual(['J', [{
+    }, undefined, x)).toEqual(['J', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -207,7 +202,7 @@ describe('hatetrisAi', () => {
         0b1111000011,
         0b1111100111
       ]
-    }, undefined, getNextCoreStates)).toEqual(['T', [{
+    }, undefined, x)).toEqual(['T', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -240,7 +235,7 @@ describe('hatetrisAi', () => {
         0b1111000011,
         0b1111100111
       ]
-    }, undefined, getNextCoreStates)).toEqual(['L', [{
+    }, undefined, x)).toEqual(['L', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -269,7 +264,7 @@ describe('hatetrisAi', () => {
         0b1111111110,
         0b1111111110
       ]
-    }, undefined, getNextCoreStates)).toEqual(['S', [{
+    }, undefined, x)).toEqual(['S', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -310,7 +305,7 @@ describe('hatetrisAi', () => {
         0b0000000000
       ],
       pieceIds: ['S']
-    }], getNextCoreStates)).toEqual(['Z', [{
+    }], x)).toEqual(['Z', [{
       well: [
         0b0000000000,
         0b0000000000,
@@ -350,7 +345,7 @@ describe('hatetrisAi', () => {
         0b0000000000
       ],
       pieceIds: ['S', 'Z', 'O', 'I', 'L', 'J', 'T']
-    }], getNextCoreStates)).toEqual(['S', [{
+    }], x)).toEqual(['S', [{
       well: [
         0b0000000000,
         0b0000000000,

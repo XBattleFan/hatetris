@@ -1,5 +1,3 @@
-'use strict'
-
 import classnames from 'classnames'
 import * as React from 'react'
 import type { WellState, RotationSystem } from '../Game/Game.jsx'
@@ -21,7 +19,7 @@ type Cell = {
 
 export type { WellProps }
 
-export const Well = (props: WellProps) => {
+export const Well = React.memo((props: WellProps) => {
   const {
     bar,
     rotationSystem,
@@ -79,4 +77,6 @@ export const Well = (props: WellProps) => {
       </tbody>
     </table>
   )
-}
+})
+
+Well.displayName = 'Well'

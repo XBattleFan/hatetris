@@ -1,7 +1,5 @@
 /* eslint-env jest */
 
-'use strict'
-
 import type { CoreState } from '../components/Game/Game'
 import { burgAi } from './burgiel'
 
