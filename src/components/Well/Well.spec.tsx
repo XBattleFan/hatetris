@@ -59,7 +59,7 @@ describe('<Well>', () => {
           ],
           score: 31
         },
-        ai: undefined,
+        aiState: undefined,
         piece: { id: 'S', x: 3, y: 0, o: 0 }
       }
     })
@@ -94,7 +94,7 @@ describe('<Well>', () => {
           ],
           score: 31
         },
-        ai: undefined,
+        aiState: undefined,
         piece: null
       }
     })

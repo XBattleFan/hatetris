@@ -14,7 +14,7 @@ const logic = getLogic({
   rotationSystem: hatetrisRotationSystem,
   wellDepth: 8,
   wellWidth: 10
-})
+}, lovetrisAi)
 
 const getNextCoreStates = logic.getNextCoreStates
 

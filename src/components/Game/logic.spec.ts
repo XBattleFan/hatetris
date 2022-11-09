@@ -15,7 +15,7 @@ const logic = getLogic({
   rotationSystem: hatetrisRotationSystem,
   wellDepth: 20,
   wellWidth: 10
-})
+}, hatetris.ai)
 
 describe('logic', () => {
   describe('check known replays', function () {
@@ -172,6 +172,8 @@ describe('logic', () => {
           describe(name, () => {
             Object.entries(replays).forEach(([encoding, string]) => {
               it(encoding, async () => {
+                logic.setEnemyAi(enemy.ai)
+
                 const replay = hatetrisReplayCodec.decode(string)
 
                 const firstState: GameState = {
@@ -187,7 +189,7 @@ describe('logic', () => {
                   replayTimeoutId: undefined
                 }
 
-                firstState.wellStates.push(await logic.getFirstWellState(firstState))
+                firstState.wellStates.push(await logic.getFirstWellState())
                 firstState.wellStateId++
 
                 let state = firstState

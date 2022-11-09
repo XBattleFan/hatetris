@@ -111,14 +111,25 @@ class Game extends React.Component<GameProps, GameState> {
     }
   }
 
-  logic = getLogic(this.props)
+  logic = getLogic(this.props, hatetris.ai)
 
   async getFirstWellState () {
-    return await this.logic.getFirstWellState(this.state)
+    return await this.logic.getFirstWellState()
   }
 
   async handleMove (move: string) {
-    this.setState(await this.logic.handleMove(this.state, move))
+    try {
+      this.setState(await this.logic.handleMove(this.state, move))
+    } catch (error) {
+      console.error(error)
+      this.setState({
+        error: {
+          interpretation: 'Caught this exception while trying to generate a new piece using your custom AI. Game halted.',
+          real: error.message,
+          dismissable: true
+        }
+      })
+    }
   }
 
   handleClickStart = async () => {
@@ -378,6 +389,7 @@ class Game extends React.Component<GameProps, GameState> {
   }
 
   handleClickEnemy = (enemy: Enemy) => {
+    this.logic.setEnemyAi(enemy.ai)
     this.setState({
       displayEnemy: true,
       enemy,
